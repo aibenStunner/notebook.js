@@ -1,39 +1,90 @@
 import { useActions } from "../hooks/use-actions";
-import "./add-cell.css";
+import { Button, Icon } from "semantic-ui-react";
+import styled from "styled-components";
 
 interface AddCellProps {
-  forceVisible?: boolean;
   previousCellId: string | null;
 }
 
-const AddCell: React.FC<AddCellProps> = ({ forceVisible, previousCellId }) => {
+const AddCell: React.FC<AddCellProps> = ({ previousCellId }) => {
   const { insertCellAfter } = useActions();
   return (
-    <div className={`add-cell ${forceVisible && "force-visible"}`}>
-      <div className="add-buttons">
-        <button
-          className="button is-rounded is-primary is-small"
+    <AddCellWrapper>
+      <StyledAddButtonsContainer>
+        <StyledButton
           onClick={() => insertCellAfter(previousCellId, "code")}
+          compact
         >
-          <span className="icon is-small">
-            <i className="fas fa-plus"></i>
-          </span>
-          <span>Code</span>
-        </button>
-        <button
-          className="button is-rounded is-primary is-small"
+          <StyledIcon name="add" size="small" /> Code
+        </StyledButton>
+        <StyledButton
           onClick={() => insertCellAfter(previousCellId, "text")}
+          compact
         >
-          <span className="icon is-small">
-            <i className="fas fa-plus"></i>
-          </span>
-          <span>Text</span>
-        </button>
-      </div>
+          <StyledIcon name="add" size="small" /> Text
+        </StyledButton>
+      </StyledAddButtonsContainer>
 
-      <div className="divider"></div>
-    </div>
+      <Divider />
+    </AddCellWrapper>
   );
 };
+
+const AddCellWrapper = styled.div`
+  position: relative;
+  opacity: 0;
+  transition: opacity 0.3s ease-in 0.1s;
+  margin: 0;
+
+  :hover {
+    opacity: 1;
+  }
+
+  :active {
+    opacity: 1 !important;
+    transition: opacity 0s;
+  }
+`;
+
+const StyledAddButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledIcon = styled(Icon)`
+  color: ${({ theme }) => theme.colors.icon.primary};
+`;
+
+const StyledButton = styled(Button)`
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center;
+  width: 85px;
+  height: 26px;
+  background: ${({ theme }) => theme.colors.background.primary} !important;
+  color: ${({ theme }) => theme.colors.text.primary} !important;
+  border: 1px solid ${({ theme }) => theme.colors.border.primary} !important;
+  margin: 0 20px !important;
+  padding: 0 !important;
+  box-shadow: 0 4.5px 10px -5px black !important;
+  z-index: 1;
+
+  :hover {
+    background-color: ${({ theme }) =>
+      theme.colors.background.secondary} !important;
+  }
+`;
+
+const Divider = styled.div`
+  position: absolute;
+  background: red;
+  top: 50%;
+  bottom: 50%;
+  right: 2.5%;
+  left: 2.5%;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.text.secondary};
+  width: 95%;
+  z-index: 0;
+`;
 
 export default AddCell;

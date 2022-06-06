@@ -1,4 +1,3 @@
-import "./code-cell.css";
 import { useEffect } from "react";
 import { useActions } from "../hooks/use-actions";
 import { Cell } from "../state";
@@ -7,6 +6,7 @@ import Preview from "./preview";
 import { Resizable } from "./resizable";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import { useCumulativeCode } from "../hooks/use-cumulative-code";
+import styled from "styled-components";
 
 interface CodeCellProps {
   cell: Cell;
@@ -48,20 +48,48 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
             onChange={(value) => updateCell(cell.id, value)}
           />
         </Resizable>
-        <div className="progress-wrapper">
+        <PreviewWrapper>
           {!bundle || bundle.loading ? (
-            <div className="progress-cover">
-              <progress className="progress is-small is-primary" max="100">
-                Loading
-              </progress>
-            </div>
+            <ProgressWrapper>
+              <progress max="100">Loading</progress>
+            </ProgressWrapper>
           ) : (
             <Preview code={bundle.code} error={bundle.err} />
           )}
-        </div>
+        </PreviewWrapper>
       </div>
     </Resizable>
   );
 };
+
+const PreviewWrapper = styled.div`
+  height: 100%;
+  flex-grow: 1;
+  background-color: white;
+`;
+
+const ProgressWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 10%;
+  padding-right: 10%;
+  animation: fadeIn 0.5s;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+`;
 
 export default CodeCell;

@@ -69,6 +69,13 @@ export interface SaveCellsErrorAction {
   payload: string;
 }
 
+export interface UpdateSettings {
+  type: ActionType.SETTINGS;
+  payload: {
+    themeMode: string;
+  };
+}
+
 export type Action =
   | MoveCellAction
   | DeleteCellAction
@@ -79,4 +86,5 @@ export type Action =
   | FetchCellsAction
   | FetchCellsCompleteAction
   | FetchCellsErrorAction
-  | SaveCellsErrorAction;
+  | SaveCellsErrorAction
+  | UpdateSettings;

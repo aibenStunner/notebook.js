@@ -1,5 +1,5 @@
-import "./preview.css";
 import { useEffect, useRef } from "react";
+import styled from "styled-components";
 
 interface PreviewProps {
   code: string;
@@ -50,21 +50,49 @@ const Preview: React.FC<PreviewProps> = ({ code, error }) => {
   }, [code]);
 
   return (
-    <div className="preview-wrapper">
-      <iframe
+    <PreviewWrapper>
+      <StyledIFrame
         title="preview"
         ref={iframe}
         sandbox="allow-scripts"
         srcDoc={html}
       />
       {error && (
-        <div className="preview-error">
+        <PreviewErrorWrapper>
           <h4>Build Error</h4>
           {error}
-        </div>
+        </PreviewErrorWrapper>
       )}
-    </div>
+    </PreviewWrapper>
   );
 };
+
+const PreviewWrapper = styled.div`
+  position: relative;
+  height: 100%;
+  flex-grow: 1;
+
+  .react-draggable-transparent-selection &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    opacity: 0;
+  }
+`;
+
+const StyledIFrame = styled.iframe`
+  height: 100%;
+  width: 100%;
+`;
+
+const PreviewErrorWrapper = styled.div`
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: red;
+`;
 
 export default Preview;

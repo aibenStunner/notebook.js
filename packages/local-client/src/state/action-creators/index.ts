@@ -8,6 +8,7 @@ import {
   MoveCellAction,
   UpdateCellAction,
   Action,
+  UpdateSettings,
 } from "../actions";
 import { Cell, CellTypes } from "../cell";
 import bundle from "../../bundler";
@@ -106,5 +107,14 @@ export const saveCells = () => {
         payload: err.message,
       });
     }
+  };
+};
+
+export const updateSettings = (themeMode: string): UpdateSettings => {
+  return {
+    type: ActionType.SETTINGS,
+    payload: {
+      themeMode,
+    },
   };
 };

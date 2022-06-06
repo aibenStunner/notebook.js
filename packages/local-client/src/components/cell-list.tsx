@@ -1,16 +1,16 @@
-import "./cell-list.css";
 import { Fragment, useEffect } from "react";
 import { useTypedSelector } from "../hooks/use-typed-selector";
 import AddCell from "./add-cell";
 import CellListItem from "./cell-list-item";
 import { useActions } from "../hooks/use-actions";
+import styled from "styled-components";
 
 const CellList: React.FC = () => {
   const cells = useTypedSelector(({ cells: { order, data } }) =>
     order.map((id) => data[id])
   );
 
-  const { fetchCells, saveCells } = useActions();
+  const { fetchCells } = useActions();
 
   useEffect(() => {
     fetchCells();
@@ -24,11 +24,15 @@ const CellList: React.FC = () => {
   ));
 
   return (
-    <div className="cell-list">
-      <AddCell forceVisible={cells.length === 0} previousCellId={null} />
+    <CellListWrapper>
+      <AddCell previousCellId={null} />
       {renderedCells}
-    </div>
+    </CellListWrapper>
   );
 };
+
+const CellListWrapper = styled.div`
+  margin: 0 25px;
+`;
 
 export default CellList;

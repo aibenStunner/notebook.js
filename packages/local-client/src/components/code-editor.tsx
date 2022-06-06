@@ -1,4 +1,3 @@
-import "./code-editor.css";
 import "./syntax.css";
 import { useRef } from "react";
 import MonacoEditor, { EditorDidMount } from "@monaco-editor/react";
@@ -6,6 +5,7 @@ import prettier from "prettier";
 import parser from "prettier/parser-babel";
 import codeShift from "jscodeshift";
 import Highlighter from "monaco-jsx-highlighter";
+import styled from "styled-components";
 
 interface CodeEditorProps {
   initialValue: string;
@@ -54,13 +54,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
   };
 
   return (
-    <div className="editor-wrapper">
-      <button
-        className="button button-format is-primary is-small"
-        onClick={onFormatClick}
-      >
-        Format
-      </button>
+    <EditorWrapper>
+      <StyledButton onClick={onFormatClick}>Format</StyledButton>
       <MonacoEditor
         editorDidMount={onEditorDidMount}
         value={initialValue}
@@ -78,8 +73,31 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ initialValue, onChange }) => {
           automaticLayout: true,
         }}
       />
-    </div>
+    </EditorWrapper>
   );
 };
+
+const EditorWrapper = styled.div`
+  position: relative;
+  height: 100%;
+  width: calc(100% - 10px);
+`;
+
+const StyledButton = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 20;
+  background-color: green;
+  padding: 10px;
+  font-size: 15px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  :hover {
+    opacity: 1;
+  }
+`;
 
 export default CodeEditor;

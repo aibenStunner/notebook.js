@@ -67,5 +67,3 @@ export const Resizable: React.FC<ResizableProps> = ({
   }
   return <ResizableBox {...resizableProps}>{children}</ResizableBox>;
 };
-
-// export default Resizable;
