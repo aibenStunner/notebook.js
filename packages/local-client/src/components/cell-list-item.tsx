@@ -11,24 +11,29 @@ import styled from "styled-components";
 
 interface CellListItemProps {
   cell: Cell;
+  focused: boolean;
 }
 
-const CellListItem: React.FC<CellListItemProps> = ({ cell }) => {
+const CellListItem: React.FC<CellListItemProps> = ({ cell, focused }) => {
   const { updateCurrentCell } = useContext(
     CurrentCellContext
   ) as CurrentCellContextType;
 
   return (
-    <CellListItemWrapper onClick={() => updateCurrentCell(cell)}>
+    <CellListItemWrapper>
       {cell.type === "code" ? (
         <>
-          <ActionBar id={cell.id} />
-          <CodeCell cell={cell} />
+          {focused && <ActionBar id={cell.id} />}
+          <div onClick={() => updateCurrentCell(cell)}>
+            <CodeCell cell={cell} />
+          </div>
         </>
       ) : (
         <>
-          <TextEditor cell={cell} />
-          <ActionBar id={cell.id} />
+          <div onClick={() => updateCurrentCell(cell)}>
+            <TextEditor cell={cell} focused={focused} />
+          </div>
+          {focused && <ActionBar id={cell.id} />}
         </>
       )}
     </CellListItemWrapper>

@@ -1,6 +1,12 @@
 import { useActions } from "../hooks/use-actions";
 import { Button, Icon } from "semantic-ui-react";
 import styled from "styled-components";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import { useContext, useEffect } from "react";
+import {
+  CurrentCellContext,
+  CurrentCellContextType,
+} from "../contexts/currentCellContext";
 
 interface AddCellProps {
   previousCellId: string | null;
@@ -8,6 +14,21 @@ interface AddCellProps {
 
 const AddCell: React.FC<AddCellProps> = ({ previousCellId }) => {
   const { insertCellAfter } = useActions();
+  const { order: cellsOrder, data: cellsData } = useTypedSelector(
+    ({ cells: { order, data } }) => ({ order, data })
+  );
+  const { updateCurrentCell } = useContext(
+    CurrentCellContext
+  ) as CurrentCellContextType;
+
+  useEffect(() => {
+    const currentCellIdx = cellsOrder.findIndex(
+      (cellId) => cellId === previousCellId
+    );
+
+    updateCurrentCell(cellsData[cellsOrder[currentCellIdx]]);
+  }, []);
+
   return (
     <AddCellWrapper>
       <StyledAddButtonsContainer>

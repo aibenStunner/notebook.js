@@ -1,6 +1,12 @@
 import { useActions } from "../hooks/use-actions";
 import styled from "styled-components";
 import { Button, Icon } from "semantic-ui-react";
+import { useTypedSelector } from "../hooks/use-typed-selector";
+import { useCallback, useContext } from "react";
+import {
+  CurrentCellContext,
+  CurrentCellContextType,
+} from "../contexts/currentCellContext";
 
 interface ActionBarProps {
   id: string;
@@ -8,12 +14,32 @@ interface ActionBarProps {
 
 const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
   const { moveCell, deleteCell } = useActions();
+  const { order: cellsOrder, data: cellsData } = useTypedSelector(
+    ({ cells: { order, data } }) => ({ order, data })
+  );
+  const { updateCurrentCell } = useContext(
+    CurrentCellContext
+  ) as CurrentCellContextType;
+
+  const removeCell = useCallback(
+    (id: string) => {
+      const deleledCellIdx = cellsOrder.findIndex((cellId) => cellId === id);
+      const newCurrentCell =
+        cellsData[cellsOrder[deleledCellIdx + 1]] ||
+        cellsData[cellsOrder[deleledCellIdx - 1]];
+
+      deleteCell(id);
+
+      updateCurrentCell(newCurrentCell);
+    },
+    [cellsData, cellsOrder]
+  );
 
   return (
     <ActionBarWrapper>
       <ActionButton action={() => moveCell(id, "up")} icon="arrow up" />
       <ActionButton action={() => moveCell(id, "down")} icon="arrow down" />
-      <ActionButton action={() => deleteCell(id)} icon="trash" />
+      <ActionButton action={() => removeCell(id)} icon="trash" />
     </ActionBarWrapper>
   );
 };
