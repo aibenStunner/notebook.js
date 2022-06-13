@@ -87,7 +87,7 @@ const StyledButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.border.primary} !important;
   margin: 0 20px !important;
   padding: 0 !important;
-  box-shadow: 0 4.5px 10px -5px black !important;
+  box-shadow: 0px 3px 10px -5px black !important;
   z-index: 1;
 
   :hover {

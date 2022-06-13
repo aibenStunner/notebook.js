@@ -38,16 +38,13 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell, focused }) => {
 
   if (editing) {
     return (
-      <div
-        className="text-editor"
-        ref={ref}
-        onDoubleClick={() => setEditing(false)}
-      >
+      <StyledTextEditor ref={ref} onDoubleClick={() => setEditing(false)}>
         <MDEditor
+          height="inherit"
           value={cell.content}
           onChange={(v) => updateCell(cell.id, v || "")}
         />
-      </div>
+      </StyledTextEditor>
     );
   }
 
@@ -65,27 +62,26 @@ const TextEditor: React.FC<TextEditorProps> = ({ cell, focused }) => {
 
 const MarkdownWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background.primary};
-  padding: 10px 0 10px 5px;
+  padding: 10px 5px 10px 10px;
 
   &.focused {
-    background-color: red;
+    -webkit-box-shadow: 0 2px 7px -2px #000000;
+    -moz-box-shadow: 0 2px 7px -2px #000000;
+    box-shadow: 0 2px 7px -2px #000000;
   }
 `;
 
 const StyledTextEditor = styled.div`
-  // .w-md-editor-bar svg {
-  //   display: none;
-  // }
+  -webkit-box-shadow: 0 2px 7px -2px #000000;
+  -moz-box-shadow: 0 2px 7px -2px #000000;
+  box-shadow: 0 2px 7px -2px #000000;
+
+  .w-md-editor-bar svg {
+    display: none;
+  }
 
   .w-md-editor-bar {
-    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=");
-    height: 11px;
-    cursor: row-resize;
-    background-color: #37414b;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    width: 100%;
-    position: relative;
+    display: none;
   }
 
   em {
@@ -93,7 +89,7 @@ const StyledTextEditor = styled.div`
   }
 
   .wmde-markdown hr {
-    border-top: 1px solid #dee5ed;
+    border-top: 100 rpx solid red;
   }
 
   .wmde-markdown ol {
@@ -101,20 +97,66 @@ const StyledTextEditor = styled.div`
   }
 
   .w-md-editor-toolbar {
-    background-color: #37414b;
-    border-bottom: 1px solid gray;
+    display: flex;
+    align-items: center;
+    background-color: ${({ theme }) => theme.colors.background.secondary};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.border.primary};
+    height: 40px;
   }
 
   .w-md-editor-toolbar li button {
-    color: #d4d4d4;
+    color: ${({ theme }) => theme.colors.icon.primary};
+
+    :hover {
+      color: ${({ theme }) => theme.colors.text.secondary};
+      background-color: transparent;
+    }
+  }
+
+  [data-name="edit"] {
+    display: none;
+  }
+
+  [data-name="live"] {
+    display: none;
+  }
+
+  [data-name="preview"] {
+    display: none;
+  }
+
+  .w-md-editor-toolbar-divider {
+    display: none;
+  }
+
+  .w-md-editor-toolbar li.active button {
+    background-color: ${({ theme }) => theme.colors.text.secondary};
   }
 
   .w-md-editor-content {
-    background-color: #202123;
+    background-color: ${({ theme }) => theme.colors.background.primary};
   }
 
   .w-md-editor .w-md-editor-text-pre {
-    color: #d4d4d4;
+    color: ${({ theme }) => theme.colors.text.primary};
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+    letter-spacing: 0px;
+  }
+
+  .w-md-editor .w-md-editor-text-input {
+    font-family: "Roboto Mono", monospace;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 19px;
+    letter-spacing: 0px;
+    caret-color: ${({ theme }) => theme.colors.text.primary};
+  }
+
+  .w-md-editor {
+    color: ${({ theme }) => theme.colors.text.primary};
   }
 
   .w-md-editor-text-pre .bold {
