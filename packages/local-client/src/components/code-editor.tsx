@@ -92,7 +92,7 @@ const StyledButton = styled.div`
   padding: 10px;
   font-size: 15px;
   border-radius: 4px;
-  opacity: 0;
+  opacity: 0.2;
   transition: opacity 0.3s;
 
   :hover {
