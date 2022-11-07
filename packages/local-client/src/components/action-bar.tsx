@@ -10,9 +10,10 @@ import {
 
 interface ActionBarProps {
   id: string;
+  isCodeCell?: boolean;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ id, isCodeCell }) => {
   const { moveCell, deleteCell } = useActions();
   const { order: cellsOrder, data: cellsData } = useTypedSelector(
     ({ cells: { order, data } }) => ({ order, data })
@@ -37,8 +38,17 @@ const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
 
   return (
     <ActionBarWrapper>
-      <ActionButton action={() => moveCell(id, "up")} icon="arrow up" />
-      <ActionButton action={() => moveCell(id, "down")} icon="arrow down" />
+      <ActionButton
+        action={() => moveCell(id, "up")}
+        icon="arrow up"
+        deactivateMoveUp={id === cellsOrder[0]}
+      />
+      <ActionButton
+        action={() => moveCell(id, "down")}
+        icon="arrow down"
+        deactivateMoveDown={id === cellsOrder[cellsOrder.length - 1]}
+      />
+      {!!isCodeCell && <ActionButton action={() => {}} icon="paint brush" />}
       <ActionButton action={() => removeCell(id)} icon="trash" />
     </ActionBarWrapper>
   );
@@ -47,11 +57,23 @@ const ActionBar: React.FC<ActionBarProps> = ({ id }) => {
 interface ActionButtonProps {
   action: () => void;
   icon: string;
+  deactivateMoveUp?: boolean;
+  deactivateMoveDown?: boolean;
 }
 
-const ActionButton: React.FC<ActionButtonProps> = ({ action, icon }) => {
+const ActionButton: React.FC<ActionButtonProps> = ({
+  action,
+  icon,
+  deactivateMoveUp,
+  deactivateMoveDown,
+}) => {
   return (
-    <StyledButton onClick={action} active={false} compact>
+    <StyledButton
+      onClick={action}
+      active={false}
+      disabled={deactivateMoveUp || deactivateMoveDown}
+      compact
+    >
       <StyledIcon name={icon} size="small" />
     </StyledButton>
   );

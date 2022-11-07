@@ -23,9 +23,9 @@ const CellListItem: React.FC<CellListItemProps> = ({ cell, focused }) => {
     <CellListItemWrapper>
       {cell.type === "code" ? (
         <>
-          {focused && <ActionBar id={cell.id} />}
+          {focused && <ActionBar id={cell.id} isCodeCell />}
           <div onClick={() => updateCurrentCell(cell)}>
-            <CodeCell cell={cell} />
+            <CodeCell cell={cell} focused={focused} />
           </div>
         </>
       ) : (

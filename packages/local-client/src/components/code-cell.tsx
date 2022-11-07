@@ -10,9 +10,10 @@ import styled from "styled-components";
 
 interface CodeCellProps {
   cell: Cell;
+  focused: boolean;
 }
 
-const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
+const CodeCell: React.FC<CodeCellProps> = ({ cell, focused }) => {
   const { updateCell, createBundle } = useActions();
   const bundle = useTypedSelector((state) => state.bundles[cell.id]);
   const cumulativeCode = useCumulativeCode(cell.id);
@@ -34,33 +35,43 @@ const CodeCell: React.FC<CodeCellProps> = ({ cell }) => {
   }, [cumulativeCode, cell.id, createBundle]);
 
   return (
-    <Resizable direction="vertical">
-      <div
-        style={{
-          height: "calc(100% - 10px)",
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        <Resizable direction="horizontal">
-          <CodeEditor
-            initialValue={cell.content}
-            onChange={(value) => updateCell(cell.id, value)}
-          />
-        </Resizable>
-        <PreviewWrapper>
-          {!bundle || bundle.loading ? (
-            <ProgressWrapper>
-              <progress max="100">Loading</progress>
-            </ProgressWrapper>
-          ) : (
-            <Preview code={bundle.code} error={bundle.err} />
-          )}
-        </PreviewWrapper>
-      </div>
-    </Resizable>
+    <StyledCodeCell className={focused ? "focused" : ""}>
+      <Resizable direction="vertical">
+        <div
+          style={{
+            height: "calc(100% - 10px)",
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Resizable direction="horizontal">
+            <CodeEditor
+              initialValue={cell.content}
+              onChange={(value) => updateCell(cell.id, value)}
+            />
+          </Resizable>
+          <PreviewWrapper>
+            {!bundle || bundle.loading ? (
+              <ProgressWrapper>
+                <progress max="100">Loading</progress>
+              </ProgressWrapper>
+            ) : (
+              <Preview code={bundle.code} error={bundle.err} />
+            )}
+          </PreviewWrapper>
+        </div>
+      </Resizable>
+    </StyledCodeCell>
   );
 };
+
+const StyledCodeCell = styled.div`
+  &.focused {
+    -webkit-box-shadow: 0 2px 7px -2px #000000;
+    -moz-box-shadow: 0 2px 7px -2px #000000;
+    box-shadow: 0 2px 7px -2px #000000;
+  }
+`;
 
 const PreviewWrapper = styled.div`
   height: 100%;
